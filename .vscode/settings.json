@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.tcc": "c",
+        "type_traits": "c",
+        "semaphore.h": "c",
+        "pthread.h": "c"
+    }
+}
