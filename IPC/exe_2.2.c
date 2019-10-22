@@ -22,18 +22,18 @@ void Y(void *argp) {
 }
 
 int main(void) {
-	pthread_t X, Y, Z;
+	pthread_t t1, t2, t3;
 	sem_init(&lock, 0, 1);
 	sem_init(&lock_two, 0, 1);
 
 	int rc;
-	rc = pthread_create(&X, NULL, (void *)X, NULL);
-	rc = pthread_create(&Y, NULL, (void *)Y, NULL);
-    rc = pthread_create(&Z, NULL, (void *)Z, NULL);
+	rc = pthread_create(&t1, NULL, (void *)X, NULL);
+	rc = pthread_create(&t2, NULL, (void *)Y, NULL);
+    rc = pthread_create(&t3, NULL, (void *)Z, NULL);
 
-	rc = pthread_join(X, NULL);
-	rc = pthread_join(Y, NULL);
-    rc = pthread_join(Z, NULL);
+	rc = pthread_join(t1, NULL);
+	rc = pthread_join(t2, NULL);
+    rc = pthread_join(t3, NULL);
 	printf("n=%d\n", n);
 	return 0;
 }
