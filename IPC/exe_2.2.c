@@ -10,6 +10,7 @@ sem_t lock, lock_two;
 void  X(void *argp) {
 	n = n * 16;
 	sem_post(&lock);
+	sem_wait(&lock_two);
 }
 void Z(void *argp) {
 	sem_wait(&lock);
@@ -17,23 +18,38 @@ void Z(void *argp) {
 	sem_post(&lock_two);
 }
 void Y(void *argp) {
+	sem_wait(&lock);
 	sem_wait(&lock_two);
 	n = n / 7;
 }
 
 int main(void) {
-	pthread_t t1, t2, t3;
-	sem_init(&lock, 0, 1);
-	sem_init(&lock_two, 0, 1);
+	int i = 0;
+	int contador = 0;
+	while (i < 10000)
+	{
+		pthread_t t1, t2, t3;
+		sem_init(&lock, 0, 1);
+		sem_init(&lock_two, 0, 1);
 
-	int rc;
-	rc = pthread_create(&t1, NULL, (void *)X, NULL);
-	rc = pthread_create(&t2, NULL, (void *)Y, NULL);
-    rc = pthread_create(&t3, NULL, (void *)Z, NULL);
+		int rc;
+		rc = pthread_create(&t1, NULL, (void *)X, NULL);
+		rc = pthread_create(&t2, NULL, (void *)Y, NULL);
+		rc = pthread_create(&t3, NULL, (void *)Z, NULL);
 
-	rc = pthread_join(t1, NULL);
-	rc = pthread_join(t2, NULL);
-    rc = pthread_join(t3, NULL);
-	printf("n=%d\n", n);
+		rc = pthread_join(t1, NULL);
+		rc = pthread_join(t2, NULL);
+		rc = pthread_join(t3, NULL);
+		printf("n=%d\n", n);
+		if (n != 8)
+		{
+			contador++;
+		}
+		n = 1;
+		i++;
+	}
+	printf("contador=%d\n", contador);
+	
+	
 	return 0;
 }
